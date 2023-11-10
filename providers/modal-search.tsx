@@ -1,7 +1,7 @@
 'use client'
-import PreviewModal from '@/components/preview-modal'
 import { useEffect, useState } from 'react';
-const ModalProvider = () => {
+import SearchModal from '@/components/search-modal';
+const ModalSearchProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -13,9 +13,9 @@ const ModalProvider = () => {
     }
     return ( 
         <>
-            <PreviewModal/>
+            <SearchModal/>
         </>
     );
 }
  
-export default ModalProvider;
+export default ModalSearchProvider;
