@@ -3,25 +3,42 @@
 import { useState,useEffect, MouseEventHandler } from "react";
 import useSearchModal from "@/hooks/use-search-modal";
 import Modal from "./ui/modal";
-import Gallery from "./gallery";
 import ImageUpload from "./image-upload";
 import Button from "./ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import qs from 'query-string'
+import { redirect } from "next/navigation";
+
+import axios from "axios";
 const SearchModal = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchModal = useSearchModal();
-  const searchStore = useSearchModal((state) => state.data);
   const [data, setData] = useState<string>('')
-  useEffect(() => {
-    setIsMounted(true)
-},[])
+  const router = useRouter()
+  const pathname = usePathname()
   const onChange = (url: string) => {
     setData(url)
   }
-
+  const isSearchPage = pathname?.startsWith(`/search`);
+  const searchParams = useSearchParams();
   const onClick: MouseEventHandler<HTMLButtonElement> = async(event) => {
+    setLoading(true)
     event.stopPropagation();
-    console.log(data)
+    const current = qs.parse(searchParams.toString())
+    const response = await axios.post('http://0.0.0.0:8000/image-search',{
+      image: data
+    });
+    const query = {
+      ...current,
+      categoryName: response.data
+    }
+    const url = qs.stringifyUrl({
+      url: isSearchPage?  window.location.href : '/search',
+      query
+  },{skipNull: true});
+    router.push(url)
+    setLoading(false)
     searchModal.onClose()
   }
 
@@ -39,10 +56,6 @@ const SearchModal = () => {
   
             <Button onClick={onClick} >Search</Button>
           </div>
-      
-
-
-    
     </Modal>
   );
 };
