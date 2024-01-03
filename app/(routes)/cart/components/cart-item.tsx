@@ -41,7 +41,7 @@ const CartItem: React.FC<CartItemProps> = ({
                     className="absolute z-10 right-0 top-0"
                 >
                     <IconButton
-                        onClick={() => {}}
+                        onClick={onRemove}
                         icon={<X size={15} />}
                     />
                 </div>

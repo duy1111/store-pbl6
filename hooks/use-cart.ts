@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Product } from "@/type";
 import {persist, createJSONStorage} from "zustand/middleware"
-import { data } from "autoprefixer";
 import toast from "react-hot-toast";
 interface CartStore {
     items: Product[];
